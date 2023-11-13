@@ -1,0 +1,2457 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/DaltonWise/Homework/blob/main/HDS%20Week%2011%3A%20Replacing%20column%20values.%20\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Replacing**\n",
+        "\n",
+        "Missing Values:\n",
+        "\n",
+        "Pandas will display missing values as /null/ and none values as NaN. You can fill in missing values using fillna(). The missing values can be filled with whatever you choose. These could be default values, a value from another column, or an average value. You just put what you wanted to be filled as in the (). You can add the values from another column.\n",
+        "\n",
+        "Inconsistent Formatting:\n",
+        "\n",
+        "String functions and or regular expressions can be used to alter the formatting of a data set and make it more consistent. Examples would be shifting to upper or lower case or removing extra characters.\n",
+        "\n",
+        "data['letter'].str.lower()\n",
+        "\n",
+        "data['letter'].str.replace(' [a-z]', '')\n",
+        "\n",
+        "So we made all the letters value lower case. We also found each of the times\n",
+        "' [a-z]+' appears it and replaced it with a blank space.\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "VzT_Eg-ibmyx"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "id": "RXN6cqNPaG-M"
+      },
+      "outputs": [],
+      "source": [
+        "#This creates its only data frame using the values within the parenthesis. Each [] is a letter number list.\n",
+        "import pandas as pd\n",
+        "data = pd.DataFrame([['a',1],['B',None],['C c',3]], columns=['letter','number'])"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "id": "vyjZWq5baG-T",
+        "outputId": "190c3b3f-c8a5-498a-f0e3-a5f0295cf101",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 143
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "  letter  number\n",
+              "0      a     1.0\n",
+              "1      B     NaN\n",
+              "2    C c     3.0"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-fc23604c-fda2-4249-884c-48f66c048e87\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>letter</th>\n",
+              "      <th>number</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>a</td>\n",
+              "      <td>1.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>B</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>C c</td>\n",
+              "      <td>3.0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-fc23604c-fda2-4249-884c-48f66c048e87')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-fc23604c-fda2-4249-884c-48f66c048e87 button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-fc23604c-fda2-4249-884c-48f66c048e87');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "<div id=\"df-97e79b0f-fdf7-4022-9ba2-56964ab22ae0\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-97e79b0f-fdf7-4022-9ba2-56964ab22ae0')\"\n",
+              "            title=\"Suggest charts\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "  </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "  <script>\n",
+              "    async function quickchart(key) {\n",
+              "      const quickchartButtonEl =\n",
+              "        document.querySelector('#' + key + ' button');\n",
+              "      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "      quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "      try {\n",
+              "        const charts = await google.colab.kernel.invokeFunction(\n",
+              "            'suggestCharts', [key], {});\n",
+              "      } catch (error) {\n",
+              "        console.error('Error during call to suggestCharts:', error);\n",
+              "      }\n",
+              "      quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "      quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "    }\n",
+              "    (() => {\n",
+              "      let quickchartButtonEl =\n",
+              "        document.querySelector('#df-97e79b0f-fdf7-4022-9ba2-56964ab22ae0 button');\n",
+              "      quickchartButtonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "    })();\n",
+              "  </script>\n",
+              "</div>\n",
+              "    </div>\n",
+              "  </div>\n"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 2
+        }
+      ],
+      "source": [
+        "data"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "NK48zVAjaG-V"
+      },
+      "source": [
+        "---\n",
+        "### Fill NaN with a fixed value"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 3,
+      "metadata": {
+        "id": "t6b0nIJBaG-X",
+        "outputId": "8e38f6ba-a1ad-4e69-de87-4f9e6f752014",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0    1.0\n",
+              "1    0.0\n",
+              "2    3.0\n",
+              "Name: number, dtype: float64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 3
+        }
+      ],
+      "source": [
+        "#Here we are filling all the na valus from the column number with the value 0.\n",
+        "data['number'].fillna(0)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "iifFvhgUaG-Y"
+      },
+      "source": [
+        "---\n",
+        "### Fill NaN with a calculated value"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 4,
+      "metadata": {
+        "id": "P-AqSC7SaG-Z",
+        "outputId": "79bd8806-830f-4c45-f423-5f2ec6a54e46",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0    1.0\n",
+              "1    2.0\n",
+              "2    3.0\n",
+              "Name: number, dtype: float64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 4
+        }
+      ],
+      "source": [
+        "#Here we fill all the na values with the mean of all the values from the column number.\n",
+        "data['number'].fillna(data['number'].mean())"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "mQZ5x31oaG-a"
+      },
+      "source": [
+        "---\n",
+        "### Fill NA with another column"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "tyVjUs9daG-b"
+      },
+      "outputs": [],
+      "source": [
+        "#Here we swap in the letters column when a number is missing.\n",
+        "data['number'].fillna(data['letter'])"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 5,
+      "metadata": {
+        "id": "majJ74OgaG-c"
+      },
+      "outputs": [],
+      "source": [
+        "#This is us again creating another data frame.\n",
+        "import pandas as pd\n",
+        "states = pd.DataFrame([\n",
+        "    ['1','AK',703423],\n",
+        "    [pd.NA, 'AL', 5634923],\n",
+        "    [pd.NA, 'AR', 3029341],\n",
+        "    [pd.NA, 'AZ', 2317412],\n",
+        "    ['2', 'CA', 13493821],\n",
+        "    [pd.NA, 'CO', 5434124]\n",
+        "], columns=['region','state','population'])"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "088jdi_TaG-d",
+        "outputId": "6a0ded8b-5c85-41d3-ccf1-19010eb5dff6"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>region</th>\n",
+              "      <th>state</th>\n",
+              "      <th>population</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>1</td>\n",
+              "      <td>AK</td>\n",
+              "      <td>703423</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>&lt;NA&gt;</td>\n",
+              "      <td>AL</td>\n",
+              "      <td>5634923</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>&lt;NA&gt;</td>\n",
+              "      <td>AR</td>\n",
+              "      <td>3029341</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>&lt;NA&gt;</td>\n",
+              "      <td>AZ</td>\n",
+              "      <td>2317412</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2</td>\n",
+              "      <td>CA</td>\n",
+              "      <td>13493821</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5</th>\n",
+              "      <td>&lt;NA&gt;</td>\n",
+              "      <td>CO</td>\n",
+              "      <td>5434124</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "  region state  population\n",
+              "0      1    AK      703423\n",
+              "1   <NA>    AL     5634923\n",
+              "2   <NA>    AR     3029341\n",
+              "3   <NA>    AZ     2317412\n",
+              "4      2    CA    13493821\n",
+              "5   <NA>    CO     5434124"
+            ]
+          },
+          "execution_count": 21,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "states"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "WYh2z4RnaG-d"
+      },
+      "outputs": [],
+      "source": [
+        "# states['region_clean'] = states['region'].fillna(states['state'])\n",
+        "states['region'].fillna(states['state'], inplace=True)\n",
+        "\n",
+        "#For each na value in the region column, fill it with the corresponding state."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "EDkFNW3haG-e",
+        "outputId": "78151847-385e-4478-8836-314ab91bade6"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>region</th>\n",
+              "      <th>state</th>\n",
+              "      <th>population</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>1</td>\n",
+              "      <td>AK</td>\n",
+              "      <td>703423</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>AL</td>\n",
+              "      <td>AL</td>\n",
+              "      <td>5634923</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>AR</td>\n",
+              "      <td>AR</td>\n",
+              "      <td>3029341</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>AZ</td>\n",
+              "      <td>AZ</td>\n",
+              "      <td>2317412</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2</td>\n",
+              "      <td>CA</td>\n",
+              "      <td>13493821</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5</th>\n",
+              "      <td>CO</td>\n",
+              "      <td>CO</td>\n",
+              "      <td>5434124</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "  region state  population\n",
+              "0      1    AK      703423\n",
+              "1     AL    AL     5634923\n",
+              "2     AR    AR     3029341\n",
+              "3     AZ    AZ     2317412\n",
+              "4      2    CA    13493821\n",
+              "5     CO    CO     5434124"
+            ]
+          },
+          "execution_count": 23,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "states"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "NpoGxzlLaG-e"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 6,
+      "metadata": {
+        "id": "l9dZ6mgSaG-e"
+      },
+      "outputs": [],
+      "source": [
+        "#New data frame again.\n",
+        "import pandas as pd\n",
+        "states = pd.DataFrame([\n",
+        "    ['1','AK',703423],\n",
+        "    [pd.NA, 'AL', 5634923],\n",
+        "    [pd.NA, 'AR', 3029341],\n",
+        "    [pd.NA, 'AZ', 2317412],\n",
+        "    ['2', 'CA', 13493821],\n",
+        "    [pd.NA, 'CO', 5434124]\n",
+        "], columns=['region','state','population'])"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "L5eFK5Q6aG-f",
+        "outputId": "71c3ba52-fecf-443c-e9bf-55a696f1177e"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>region</th>\n",
+              "      <th>state</th>\n",
+              "      <th>population</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>1</td>\n",
+              "      <td>AK</td>\n",
+              "      <td>703423</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>&lt;NA&gt;</td>\n",
+              "      <td>AL</td>\n",
+              "      <td>5634923</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>&lt;NA&gt;</td>\n",
+              "      <td>AR</td>\n",
+              "      <td>3029341</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>&lt;NA&gt;</td>\n",
+              "      <td>AZ</td>\n",
+              "      <td>2317412</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2</td>\n",
+              "      <td>CA</td>\n",
+              "      <td>13493821</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5</th>\n",
+              "      <td>&lt;NA&gt;</td>\n",
+              "      <td>CO</td>\n",
+              "      <td>5434124</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "  region state  population\n",
+              "0      1    AK      703423\n",
+              "1   <NA>    AL     5634923\n",
+              "2   <NA>    AR     3029341\n",
+              "3   <NA>    AZ     2317412\n",
+              "4      2    CA    13493821\n",
+              "5   <NA>    CO     5434124"
+            ]
+          },
+          "execution_count": 26,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "states"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "24PgJPvCaG-f"
+      },
+      "outputs": [],
+      "source": [
+        "#You are filling each NA value in the region column.\n",
+        "states['region'].fillna(method='ffill', inplace=True)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "MQ4Zuf_QaG-f",
+        "outputId": "39f14764-e748-468f-e148-ca2eadb68aee"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>region</th>\n",
+              "      <th>state</th>\n",
+              "      <th>population</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>1</td>\n",
+              "      <td>AK</td>\n",
+              "      <td>703423</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>1</td>\n",
+              "      <td>AL</td>\n",
+              "      <td>5634923</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>1</td>\n",
+              "      <td>AR</td>\n",
+              "      <td>3029341</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>1</td>\n",
+              "      <td>AZ</td>\n",
+              "      <td>2317412</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>2</td>\n",
+              "      <td>CA</td>\n",
+              "      <td>13493821</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5</th>\n",
+              "      <td>2</td>\n",
+              "      <td>CO</td>\n",
+              "      <td>5434124</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "  region state  population\n",
+              "0      1    AK      703423\n",
+              "1      1    AL     5634923\n",
+              "2      1    AR     3029341\n",
+              "3      1    AZ     2317412\n",
+              "4      2    CA    13493821\n",
+              "5      2    CO     5434124"
+            ]
+          },
+          "execution_count": 29,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "states"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "YVhhSLamaG-g"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "E0bPCCoBaG-g"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "vPiwtcIWaG-g"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "_bbUQhYnaG-g"
+      },
+      "source": [
+        "---\n",
+        "---\n",
+        "\n",
+        "### String Functions"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 7,
+      "metadata": {
+        "id": "5IpnCqKkaG-h"
+      },
+      "outputs": [],
+      "source": [
+        "#creating a new data frame and assigning it to the variable data.\n",
+        "data = pd.DataFrame([['a',1],['B',None],['Cat c',3]], columns=['letter','number'])"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 8,
+      "metadata": {
+        "id": "zUPANodQaG-h",
+        "outputId": "a39ef716-172f-410c-be95-167134a8942d",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 143
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "  letter  number\n",
+              "0      a     1.0\n",
+              "1      B     NaN\n",
+              "2  Cat c     3.0"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-e52aa83b-84af-41f5-89bc-fde79e7c484a\" class=\"colab-df-container\">\n",
+              "    <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>letter</th>\n",
+              "      <th>number</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>a</td>\n",
+              "      <td>1.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>B</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>Cat c</td>\n",
+              "      <td>3.0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "    <div class=\"colab-df-buttons\">\n",
+              "\n",
+              "  <div class=\"colab-df-container\">\n",
+              "    <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-e52aa83b-84af-41f5-89bc-fde79e7c484a')\"\n",
+              "            title=\"Convert this dataframe to an interactive table.\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\">\n",
+              "    <path d=\"M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z\"/>\n",
+              "  </svg>\n",
+              "    </button>\n",
+              "\n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-buttons div {\n",
+              "      margin-bottom: 4px;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "    <script>\n",
+              "      const buttonEl =\n",
+              "        document.querySelector('#df-e52aa83b-84af-41f5-89bc-fde79e7c484a button.colab-df-convert');\n",
+              "      buttonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "      async function convertToInteractive(key) {\n",
+              "        const element = document.querySelector('#df-e52aa83b-84af-41f5-89bc-fde79e7c484a');\n",
+              "        const dataTable =\n",
+              "          await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                    [key], {});\n",
+              "        if (!dataTable) return;\n",
+              "\n",
+              "        const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "          '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "          + ' to learn more about interactive tables.';\n",
+              "        element.innerHTML = '';\n",
+              "        dataTable['output_type'] = 'display_data';\n",
+              "        await google.colab.output.renderOutput(dataTable, element);\n",
+              "        const docLink = document.createElement('div');\n",
+              "        docLink.innerHTML = docLinkHtml;\n",
+              "        element.appendChild(docLink);\n",
+              "      }\n",
+              "    </script>\n",
+              "  </div>\n",
+              "\n",
+              "\n",
+              "<div id=\"df-93f60acf-66ed-4cef-a9b7-c41859531db6\">\n",
+              "  <button class=\"colab-df-quickchart\" onclick=\"quickchart('df-93f60acf-66ed-4cef-a9b7-c41859531db6')\"\n",
+              "            title=\"Suggest charts\"\n",
+              "            style=\"display:none;\">\n",
+              "\n",
+              "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "     width=\"24px\">\n",
+              "    <g>\n",
+              "        <path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z\"/>\n",
+              "    </g>\n",
+              "</svg>\n",
+              "  </button>\n",
+              "\n",
+              "<style>\n",
+              "  .colab-df-quickchart {\n",
+              "      --bg-color: #E8F0FE;\n",
+              "      --fill-color: #1967D2;\n",
+              "      --hover-bg-color: #E2EBFA;\n",
+              "      --hover-fill-color: #174EA6;\n",
+              "      --disabled-fill-color: #AAA;\n",
+              "      --disabled-bg-color: #DDD;\n",
+              "  }\n",
+              "\n",
+              "  [theme=dark] .colab-df-quickchart {\n",
+              "      --bg-color: #3B4455;\n",
+              "      --fill-color: #D2E3FC;\n",
+              "      --hover-bg-color: #434B5C;\n",
+              "      --hover-fill-color: #FFFFFF;\n",
+              "      --disabled-bg-color: #3B4455;\n",
+              "      --disabled-fill-color: #666;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart {\n",
+              "    background-color: var(--bg-color);\n",
+              "    border: none;\n",
+              "    border-radius: 50%;\n",
+              "    cursor: pointer;\n",
+              "    display: none;\n",
+              "    fill: var(--fill-color);\n",
+              "    height: 32px;\n",
+              "    padding: 0;\n",
+              "    width: 32px;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart:hover {\n",
+              "    background-color: var(--hover-bg-color);\n",
+              "    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "    fill: var(--button-hover-fill-color);\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-quickchart-complete:disabled,\n",
+              "  .colab-df-quickchart-complete:disabled:hover {\n",
+              "    background-color: var(--disabled-bg-color);\n",
+              "    fill: var(--disabled-fill-color);\n",
+              "    box-shadow: none;\n",
+              "  }\n",
+              "\n",
+              "  .colab-df-spinner {\n",
+              "    border: 2px solid var(--fill-color);\n",
+              "    border-color: transparent;\n",
+              "    border-bottom-color: var(--fill-color);\n",
+              "    animation:\n",
+              "      spin 1s steps(1) infinite;\n",
+              "  }\n",
+              "\n",
+              "  @keyframes spin {\n",
+              "    0% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "      border-left-color: var(--fill-color);\n",
+              "    }\n",
+              "    20% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    30% {\n",
+              "      border-color: transparent;\n",
+              "      border-left-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    40% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-top-color: var(--fill-color);\n",
+              "    }\n",
+              "    60% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "    }\n",
+              "    80% {\n",
+              "      border-color: transparent;\n",
+              "      border-right-color: var(--fill-color);\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "    90% {\n",
+              "      border-color: transparent;\n",
+              "      border-bottom-color: var(--fill-color);\n",
+              "    }\n",
+              "  }\n",
+              "</style>\n",
+              "\n",
+              "  <script>\n",
+              "    async function quickchart(key) {\n",
+              "      const quickchartButtonEl =\n",
+              "        document.querySelector('#' + key + ' button');\n",
+              "      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.\n",
+              "      quickchartButtonEl.classList.add('colab-df-spinner');\n",
+              "      try {\n",
+              "        const charts = await google.colab.kernel.invokeFunction(\n",
+              "            'suggestCharts', [key], {});\n",
+              "      } catch (error) {\n",
+              "        console.error('Error during call to suggestCharts:', error);\n",
+              "      }\n",
+              "      quickchartButtonEl.classList.remove('colab-df-spinner');\n",
+              "      quickchartButtonEl.classList.add('colab-df-quickchart-complete');\n",
+              "    }\n",
+              "    (() => {\n",
+              "      let quickchartButtonEl =\n",
+              "        document.querySelector('#df-93f60acf-66ed-4cef-a9b7-c41859531db6 button');\n",
+              "      quickchartButtonEl.style.display =\n",
+              "        google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "    })();\n",
+              "  </script>\n",
+              "</div>\n",
+              "    </div>\n",
+              "  </div>\n"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 8
+        }
+      ],
+      "source": [
+        "data"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 9,
+      "metadata": {
+        "id": "c4n7d0NiaG-h",
+        "outputId": "14032953-be0c-4101-b8b1-dc1d6b2022df",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0        a\n",
+              "1        b\n",
+              "2    cat c\n",
+              "Name: letter, dtype: object"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 9
+        }
+      ],
+      "source": [
+        "#Replace all the values in the letters column with their lower case version.\n",
+        "data['letter'].str.lower()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "gdtISnJiaG-i",
+        "outputId": "276174b9-1b19-448e-d762-5b0773efe170"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "0        A\n",
+              "1        B\n",
+              "2    CAT C\n",
+              "Name: letter, dtype: object"
+            ]
+          },
+          "execution_count": 33,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "#Replace with upper case.\n",
+        "data['letter'].str.upper()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Oj-NV-PaaG-i",
+        "outputId": "2b394221-5090-473d-b91a-d13af4f64871"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "0        A\n",
+              "1        B\n",
+              "2    Cat C\n",
+              "Name: letter, dtype: object"
+            ]
+          },
+          "execution_count": 34,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "#\n",
+        "data['letter'].str.title()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "mGaqgTGvaG-i",
+        "outputId": "1feb1a71-782c-4e39-f2e3-7755ef7ec422"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "0    a\n",
+              "1    B\n",
+              "2    c\n",
+              "Name: letter, dtype: object"
+            ]
+          },
+          "execution_count": 35,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "#We replaced the infor by saying start at the beggining of the string and replace everything before the first space with a blank space.\n",
+        "data['letter'].str.replace('^.* ','')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "yqY64xY4aG-j",
+        "outputId": "b6f67f85-d018-484f-a3d0-e2a8533d68dc"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "0    a\n",
+              "1    B\n",
+              "2    c\n",
+              "Name: letter, dtype: object"
+            ]
+          },
+          "execution_count": 36,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "data['letter'].str[-1]"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "M-RN4S5AaG-j"
+      },
+      "source": [
+        "# Situation / Problem\n",
+        "\n",
+        "In this data set, we want to group by the Proprietary Name.  How many drugs are represented here?\n",
+        "\n",
+        "* Does every row have a proprietary name? - If not, use the non-proprietary name instead\n",
+        "* Are they formatted consistently? - Make them all upper case or lower case\n",
+        "* Are they sometimes more specific than we want? - Look for extra stuff like units of measure"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 10,
+      "metadata": {
+        "id": "x05-TGu2aG-j"
+      },
+      "outputs": [],
+      "source": [
+        "import pandas as pd"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 11,
+      "metadata": {
+        "id": "U5tq_-HiaG-k",
+        "outputId": "55be4912-5636-4802-f6ba-43d588b96211",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 330
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "FileNotFoundError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mFileNotFoundError\u001b[0m                         Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-11-a57c9781c2b4>\u001b[0m in \u001b[0;36m<cell line: 1>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mndc\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpd\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mread_csv\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'/data/ndc.txt'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mdelimiter\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;34m'\\t'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/pandas/util/_decorators.py\u001b[0m in \u001b[0;36mwrapper\u001b[0;34m(*args, **kwargs)\u001b[0m\n\u001b[1;32m    209\u001b[0m                 \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    210\u001b[0m                     \u001b[0mkwargs\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mnew_arg_name\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mnew_arg_value\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 211\u001b[0;31m             \u001b[0;32mreturn\u001b[0m \u001b[0mfunc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    212\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    213\u001b[0m         \u001b[0;32mreturn\u001b[0m \u001b[0mcast\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mF\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mwrapper\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/pandas/util/_decorators.py\u001b[0m in \u001b[0;36mwrapper\u001b[0;34m(*args, **kwargs)\u001b[0m\n\u001b[1;32m    329\u001b[0m                     \u001b[0mstacklevel\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mfind_stack_level\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    330\u001b[0m                 )\n\u001b[0;32m--> 331\u001b[0;31m             \u001b[0;32mreturn\u001b[0m \u001b[0mfunc\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    332\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    333\u001b[0m         \u001b[0;31m# error: \"Callable[[VarArg(Any), KwArg(Any)], Any]\" has no\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/pandas/io/parsers/readers.py\u001b[0m in \u001b[0;36mread_csv\u001b[0;34m(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, squeeze, prefix, mangle_dupe_cols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, error_bad_lines, warn_bad_lines, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options)\u001b[0m\n\u001b[1;32m    948\u001b[0m     \u001b[0mkwds\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mupdate\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mkwds_defaults\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    949\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 950\u001b[0;31m     \u001b[0;32mreturn\u001b[0m \u001b[0m_read\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfilepath_or_buffer\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mkwds\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    951\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    952\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/pandas/io/parsers/readers.py\u001b[0m in \u001b[0;36m_read\u001b[0;34m(filepath_or_buffer, kwds)\u001b[0m\n\u001b[1;32m    603\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    604\u001b[0m     \u001b[0;31m# Create the parser.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 605\u001b[0;31m     \u001b[0mparser\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mTextFileReader\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfilepath_or_buffer\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwds\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    606\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    607\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0mchunksize\u001b[0m \u001b[0;32mor\u001b[0m \u001b[0miterator\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/pandas/io/parsers/readers.py\u001b[0m in \u001b[0;36m__init__\u001b[0;34m(self, f, engine, **kwds)\u001b[0m\n\u001b[1;32m   1440\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1441\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mhandles\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mIOHandles\u001b[0m \u001b[0;34m|\u001b[0m \u001b[0;32mNone\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1442\u001b[0;31m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_engine\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_make_engine\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mf\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mengine\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1443\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1444\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0mclose\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/pandas/io/parsers/readers.py\u001b[0m in \u001b[0;36m_make_engine\u001b[0;34m(self, f, engine)\u001b[0m\n\u001b[1;32m   1733\u001b[0m                 \u001b[0;32mif\u001b[0m \u001b[0;34m\"b\"\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mmode\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1734\u001b[0m                     \u001b[0mmode\u001b[0m \u001b[0;34m+=\u001b[0m \u001b[0;34m\"b\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1735\u001b[0;31m             self.handles = get_handle(\n\u001b[0m\u001b[1;32m   1736\u001b[0m                 \u001b[0mf\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1737\u001b[0m                 \u001b[0mmode\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.10/dist-packages/pandas/io/common.py\u001b[0m in \u001b[0;36mget_handle\u001b[0;34m(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)\u001b[0m\n\u001b[1;32m    854\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mioargs\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mencoding\u001b[0m \u001b[0;32mand\u001b[0m \u001b[0;34m\"b\"\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mioargs\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmode\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    855\u001b[0m             \u001b[0;31m# Encoding\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 856\u001b[0;31m             handle = open(\n\u001b[0m\u001b[1;32m    857\u001b[0m                 \u001b[0mhandle\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    858\u001b[0m                 \u001b[0mioargs\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmode\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mFileNotFoundError\u001b[0m: [Errno 2] No such file or directory: '/data/ndc.txt'"
+          ]
+        }
+      ],
+      "source": [
+        "ndc = pd.read_csv('/data/ndc.txt', delimiter='\\t')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "MowO5FmzaG-k",
+        "outputId": "3ee16845-6541-44ba-e5a6-cf58c4ebe003"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>PRODUCTID</th>\n",
+              "      <th>PRODUCTNDC</th>\n",
+              "      <th>PRODUCTTYPENAME</th>\n",
+              "      <th>PROPRIETARYNAME</th>\n",
+              "      <th>PROPRIETARYNAMESUFFIX</th>\n",
+              "      <th>NONPROPRIETARYNAME</th>\n",
+              "      <th>DOSAGEFORMNAME</th>\n",
+              "      <th>ROUTENAME</th>\n",
+              "      <th>STARTMARKETINGDATE</th>\n",
+              "      <th>ENDMARKETINGDATE</th>\n",
+              "      <th>MARKETINGCATEGORYNAME</th>\n",
+              "      <th>APPLICATIONNUMBER</th>\n",
+              "      <th>LABELERNAME</th>\n",
+              "      <th>SUBSTANCENAME</th>\n",
+              "      <th>ACTIVE_NUMERATOR_STRENGTH</th>\n",
+              "      <th>ACTIVE_INGRED_UNIT</th>\n",
+              "      <th>PHARM_CLASSES</th>\n",
+              "      <th>DEASCHEDULE</th>\n",
+              "      <th>NDC_EXCLUDE_FLAG</th>\n",
+              "      <th>LISTING_RECORD_CERTIFIED_THROUGH</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>0002-0800_4bb5d1cb-0fa7-48c7-9f6d-8d45f9b91649</td>\n",
+              "      <td>0002-0800</td>\n",
+              "      <td>HUMAN OTC DRUG</td>\n",
+              "      <td>Sterile Diluent</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>diluent</td>\n",
+              "      <td>INJECTION, SOLUTION</td>\n",
+              "      <td>SUBCUTANEOUS</td>\n",
+              "      <td>19870710</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA018781</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>WATER</td>\n",
+              "      <td>1</td>\n",
+              "      <td>mL/mL</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20191231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>0002-1200_957ee1b5-dfa7-4e3f-96e1-6bed1ffc0abe</td>\n",
+              "      <td>0002-1200</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Florbetapir F 18</td>\n",
+              "      <td>INJECTION, SOLUTION</td>\n",
+              "      <td>INTRAVENOUS</td>\n",
+              "      <td>20120601</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA202008</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>FLORBETAPIR F-18</td>\n",
+              "      <td>51</td>\n",
+              "      <td>mCi/mL</td>\n",
+              "      <td>Radioactive Diagnostic Agent [EPC],Positron Em...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20191231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>0002-1407_14757f9d-f641-4836-acf3-229265588d1d</td>\n",
+              "      <td>0002-1407</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>Quinidine Gluconate</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Quinidine Gluconate</td>\n",
+              "      <td>SOLUTION</td>\n",
+              "      <td>INTRAVENOUS</td>\n",
+              "      <td>19500712</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA007529</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>QUINIDINE GLUCONATE</td>\n",
+              "      <td>80</td>\n",
+              "      <td>mg/mL</td>\n",
+              "      <td>Antiarrhythmic [EPC],Cytochrome P450 2D6 Inhib...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20191231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>0002-1433_4468578a-47d2-488e-9fd4-a8322070392f</td>\n",
+              "      <td>0002-1433</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>Trulicity</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Dulaglutide</td>\n",
+              "      <td>INJECTION, SOLUTION</td>\n",
+              "      <td>SUBCUTANEOUS</td>\n",
+              "      <td>20140918</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>BLA</td>\n",
+              "      <td>BLA125469</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>DULAGLUTIDE</td>\n",
+              "      <td>.75</td>\n",
+              "      <td>mg/.5mL</td>\n",
+              "      <td>GLP-1 Receptor Agonist [EPC],Glucagon-Like Pep...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>0002-1434_4468578a-47d2-488e-9fd4-a8322070392f</td>\n",
+              "      <td>0002-1434</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>Trulicity</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Dulaglutide</td>\n",
+              "      <td>INJECTION, SOLUTION</td>\n",
+              "      <td>SUBCUTANEOUS</td>\n",
+              "      <td>20140918</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>BLA</td>\n",
+              "      <td>BLA125469</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>DULAGLUTIDE</td>\n",
+              "      <td>1.5</td>\n",
+              "      <td>mg/.5mL</td>\n",
+              "      <td>GLP-1 Receptor Agonist [EPC],Glucagon-Like Pep...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>...</th>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "      <td>...</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>89</th>\n",
+              "      <td>0003-0852_9bc9427b-2cca-466c-b41e-d47ce4540aa6</td>\n",
+              "      <td>0003-0852</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>SPRYCEL</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>dasatinib</td>\n",
+              "      <td>TABLET</td>\n",
+              "      <td>ORAL</td>\n",
+              "      <td>20080530</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA021986</td>\n",
+              "      <td>E.R. Squibb &amp; Sons, L.L.C.</td>\n",
+              "      <td>DASATINIB</td>\n",
+              "      <td>100</td>\n",
+              "      <td>mg/1</td>\n",
+              "      <td>Kinase Inhibitor [EPC],Protein Kinase Inhibito...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>90</th>\n",
+              "      <td>0003-0855_9bc9427b-2cca-466c-b41e-d47ce4540aa6</td>\n",
+              "      <td>0003-0855</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>SPRYCEL</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>dasatinib</td>\n",
+              "      <td>TABLET</td>\n",
+              "      <td>ORAL</td>\n",
+              "      <td>20101028</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA021986</td>\n",
+              "      <td>E.R. Squibb &amp; Sons, L.L.C.</td>\n",
+              "      <td>DASATINIB</td>\n",
+              "      <td>80</td>\n",
+              "      <td>mg/1</td>\n",
+              "      <td>Kinase Inhibitor [EPC],Protein Kinase Inhibito...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>91</th>\n",
+              "      <td>0003-0857_9bc9427b-2cca-466c-b41e-d47ce4540aa6</td>\n",
+              "      <td>0003-0857</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>SPRYCEL</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>dasatinib</td>\n",
+              "      <td>TABLET</td>\n",
+              "      <td>ORAL</td>\n",
+              "      <td>20101028</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA021986</td>\n",
+              "      <td>E.R. Squibb &amp; Sons, L.L.C.</td>\n",
+              "      <td>DASATINIB</td>\n",
+              "      <td>140</td>\n",
+              "      <td>mg/1</td>\n",
+              "      <td>Kinase Inhibitor [EPC],Protein Kinase Inhibito...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>92</th>\n",
+              "      <td>0003-0893_391cf576-1ae6-4a11-bf14-8e5a135cd5dd</td>\n",
+              "      <td>0003-0893</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>eliquis</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>apixaban</td>\n",
+              "      <td>TABLET, FILM COATED</td>\n",
+              "      <td>ORAL</td>\n",
+              "      <td>20121228</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA202155</td>\n",
+              "      <td>E.R. Squibb &amp; Sons, L.L.C.</td>\n",
+              "      <td>APIXABAN</td>\n",
+              "      <td>2.5</td>\n",
+              "      <td>mg/1</td>\n",
+              "      <td>Factor Xa Inhibitor [EPC],Factor Xa Inhibitors...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>93</th>\n",
+              "      <td>0003-0894_391cf576-1ae6-4a11-bf14-8e5a135cd5dd</td>\n",
+              "      <td>0003-0894</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>ELIQUIS</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>apixaban</td>\n",
+              "      <td>TABLET, FILM COATED</td>\n",
+              "      <td>ORAL</td>\n",
+              "      <td>20121228</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA202155</td>\n",
+              "      <td>E.R. Squibb &amp; Sons, L.L.C.</td>\n",
+              "      <td>APIXABAN</td>\n",
+              "      <td>5</td>\n",
+              "      <td>mg/1</td>\n",
+              "      <td>Factor Xa Inhibitor [EPC],Factor Xa Inhibitors...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>94 rows × 20 columns</p>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                                         PRODUCTID PRODUCTNDC  \\\n",
+              "0   0002-0800_4bb5d1cb-0fa7-48c7-9f6d-8d45f9b91649  0002-0800   \n",
+              "1   0002-1200_957ee1b5-dfa7-4e3f-96e1-6bed1ffc0abe  0002-1200   \n",
+              "2   0002-1407_14757f9d-f641-4836-acf3-229265588d1d  0002-1407   \n",
+              "3   0002-1433_4468578a-47d2-488e-9fd4-a8322070392f  0002-1433   \n",
+              "4   0002-1434_4468578a-47d2-488e-9fd4-a8322070392f  0002-1434   \n",
+              "..                                             ...        ...   \n",
+              "89  0003-0852_9bc9427b-2cca-466c-b41e-d47ce4540aa6  0003-0852   \n",
+              "90  0003-0855_9bc9427b-2cca-466c-b41e-d47ce4540aa6  0003-0855   \n",
+              "91  0003-0857_9bc9427b-2cca-466c-b41e-d47ce4540aa6  0003-0857   \n",
+              "92  0003-0893_391cf576-1ae6-4a11-bf14-8e5a135cd5dd  0003-0893   \n",
+              "93  0003-0894_391cf576-1ae6-4a11-bf14-8e5a135cd5dd  0003-0894   \n",
+              "\n",
+              "            PRODUCTTYPENAME      PROPRIETARYNAME PROPRIETARYNAMESUFFIX  \\\n",
+              "0            HUMAN OTC DRUG      Sterile Diluent                   NaN   \n",
+              "1   HUMAN PRESCRIPTION DRUG                  NaN                   NaN   \n",
+              "2   HUMAN PRESCRIPTION DRUG  Quinidine Gluconate                   NaN   \n",
+              "3   HUMAN PRESCRIPTION DRUG            Trulicity                   NaN   \n",
+              "4   HUMAN PRESCRIPTION DRUG            Trulicity                   NaN   \n",
+              "..                      ...                  ...                   ...   \n",
+              "89  HUMAN PRESCRIPTION DRUG              SPRYCEL                   NaN   \n",
+              "90  HUMAN PRESCRIPTION DRUG              SPRYCEL                   NaN   \n",
+              "91  HUMAN PRESCRIPTION DRUG              SPRYCEL                   NaN   \n",
+              "92  HUMAN PRESCRIPTION DRUG              eliquis                   NaN   \n",
+              "93  HUMAN PRESCRIPTION DRUG              ELIQUIS                   NaN   \n",
+              "\n",
+              "     NONPROPRIETARYNAME       DOSAGEFORMNAME     ROUTENAME  \\\n",
+              "0               diluent  INJECTION, SOLUTION  SUBCUTANEOUS   \n",
+              "1      Florbetapir F 18  INJECTION, SOLUTION   INTRAVENOUS   \n",
+              "2   Quinidine Gluconate             SOLUTION   INTRAVENOUS   \n",
+              "3           Dulaglutide  INJECTION, SOLUTION  SUBCUTANEOUS   \n",
+              "4           Dulaglutide  INJECTION, SOLUTION  SUBCUTANEOUS   \n",
+              "..                  ...                  ...           ...   \n",
+              "89            dasatinib               TABLET          ORAL   \n",
+              "90            dasatinib               TABLET          ORAL   \n",
+              "91            dasatinib               TABLET          ORAL   \n",
+              "92             apixaban  TABLET, FILM COATED          ORAL   \n",
+              "93             apixaban  TABLET, FILM COATED          ORAL   \n",
+              "\n",
+              "    STARTMARKETINGDATE  ENDMARKETINGDATE MARKETINGCATEGORYNAME  \\\n",
+              "0             19870710               NaN                   NDA   \n",
+              "1             20120601               NaN                   NDA   \n",
+              "2             19500712               NaN                   NDA   \n",
+              "3             20140918               NaN                   BLA   \n",
+              "4             20140918               NaN                   BLA   \n",
+              "..                 ...               ...                   ...   \n",
+              "89            20080530               NaN                   NDA   \n",
+              "90            20101028               NaN                   NDA   \n",
+              "91            20101028               NaN                   NDA   \n",
+              "92            20121228               NaN                   NDA   \n",
+              "93            20121228               NaN                   NDA   \n",
+              "\n",
+              "   APPLICATIONNUMBER                 LABELERNAME        SUBSTANCENAME  \\\n",
+              "0          NDA018781       Eli Lilly and Company                WATER   \n",
+              "1          NDA202008       Eli Lilly and Company     FLORBETAPIR F-18   \n",
+              "2          NDA007529       Eli Lilly and Company  QUINIDINE GLUCONATE   \n",
+              "3          BLA125469       Eli Lilly and Company          DULAGLUTIDE   \n",
+              "4          BLA125469       Eli Lilly and Company          DULAGLUTIDE   \n",
+              "..               ...                         ...                  ...   \n",
+              "89         NDA021986  E.R. Squibb & Sons, L.L.C.            DASATINIB   \n",
+              "90         NDA021986  E.R. Squibb & Sons, L.L.C.            DASATINIB   \n",
+              "91         NDA021986  E.R. Squibb & Sons, L.L.C.            DASATINIB   \n",
+              "92         NDA202155  E.R. Squibb & Sons, L.L.C.             APIXABAN   \n",
+              "93         NDA202155  E.R. Squibb & Sons, L.L.C.             APIXABAN   \n",
+              "\n",
+              "   ACTIVE_NUMERATOR_STRENGTH ACTIVE_INGRED_UNIT  \\\n",
+              "0                          1              mL/mL   \n",
+              "1                         51             mCi/mL   \n",
+              "2                         80              mg/mL   \n",
+              "3                        .75            mg/.5mL   \n",
+              "4                        1.5            mg/.5mL   \n",
+              "..                       ...                ...   \n",
+              "89                       100               mg/1   \n",
+              "90                        80               mg/1   \n",
+              "91                       140               mg/1   \n",
+              "92                       2.5               mg/1   \n",
+              "93                         5               mg/1   \n",
+              "\n",
+              "                                        PHARM_CLASSES  DEASCHEDULE  \\\n",
+              "0                                                 NaN          NaN   \n",
+              "1   Radioactive Diagnostic Agent [EPC],Positron Em...          NaN   \n",
+              "2   Antiarrhythmic [EPC],Cytochrome P450 2D6 Inhib...          NaN   \n",
+              "3   GLP-1 Receptor Agonist [EPC],Glucagon-Like Pep...          NaN   \n",
+              "4   GLP-1 Receptor Agonist [EPC],Glucagon-Like Pep...          NaN   \n",
+              "..                                                ...          ...   \n",
+              "89  Kinase Inhibitor [EPC],Protein Kinase Inhibito...          NaN   \n",
+              "90  Kinase Inhibitor [EPC],Protein Kinase Inhibito...          NaN   \n",
+              "91  Kinase Inhibitor [EPC],Protein Kinase Inhibito...          NaN   \n",
+              "92  Factor Xa Inhibitor [EPC],Factor Xa Inhibitors...          NaN   \n",
+              "93  Factor Xa Inhibitor [EPC],Factor Xa Inhibitors...          NaN   \n",
+              "\n",
+              "   NDC_EXCLUDE_FLAG  LISTING_RECORD_CERTIFIED_THROUGH  \n",
+              "0                 N                        20191231.0  \n",
+              "1                 N                        20191231.0  \n",
+              "2                 N                        20191231.0  \n",
+              "3                 N                        20201231.0  \n",
+              "4                 N                        20201231.0  \n",
+              "..              ...                               ...  \n",
+              "89                N                        20201231.0  \n",
+              "90                N                        20201231.0  \n",
+              "91                N                        20201231.0  \n",
+              "92                N                        20201231.0  \n",
+              "93                N                        20201231.0  \n",
+              "\n",
+              "[94 rows x 20 columns]"
+            ]
+          },
+          "execution_count": 39,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "ndc"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "YEKLg03qaG-k",
+        "outputId": "7626fdaa-dcbe-412a-e307-78e1cbd8c547"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "(7, 20)"
+            ]
+          },
+          "execution_count": 40,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "# STEP 1: Are any of them blank\n",
+        "\n",
+        "#we create a new filter where the proprietary name is null.\n",
+        "\n",
+        "blank_filter = ndc['PROPRIETARYNAME'].isnull()\n",
+        "\n",
+        "#We create a new data set with just the rows with the blanks.\n",
+        "blanks = ndc[blank_filter]\n",
+        "\n",
+        "#There are several rows with null values in the proprietary name.\n",
+        "blanks.shape"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "mI7l7_w5aG-l",
+        "outputId": "84136d20-7cf3-4b43-ecb9-1126ced2c84e"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/html": [
+              "<div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>PRODUCTID</th>\n",
+              "      <th>PRODUCTNDC</th>\n",
+              "      <th>PRODUCTTYPENAME</th>\n",
+              "      <th>PROPRIETARYNAME</th>\n",
+              "      <th>PROPRIETARYNAMESUFFIX</th>\n",
+              "      <th>NONPROPRIETARYNAME</th>\n",
+              "      <th>DOSAGEFORMNAME</th>\n",
+              "      <th>ROUTENAME</th>\n",
+              "      <th>STARTMARKETINGDATE</th>\n",
+              "      <th>ENDMARKETINGDATE</th>\n",
+              "      <th>MARKETINGCATEGORYNAME</th>\n",
+              "      <th>APPLICATIONNUMBER</th>\n",
+              "      <th>LABELERNAME</th>\n",
+              "      <th>SUBSTANCENAME</th>\n",
+              "      <th>ACTIVE_NUMERATOR_STRENGTH</th>\n",
+              "      <th>ACTIVE_INGRED_UNIT</th>\n",
+              "      <th>PHARM_CLASSES</th>\n",
+              "      <th>DEASCHEDULE</th>\n",
+              "      <th>NDC_EXCLUDE_FLAG</th>\n",
+              "      <th>LISTING_RECORD_CERTIFIED_THROUGH</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>0002-1200_957ee1b5-dfa7-4e3f-96e1-6bed1ffc0abe</td>\n",
+              "      <td>0002-1200</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Florbetapir F 18</td>\n",
+              "      <td>INJECTION, SOLUTION</td>\n",
+              "      <td>INTRAVENOUS</td>\n",
+              "      <td>20120601</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA202008</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>FLORBETAPIR F-18</td>\n",
+              "      <td>51</td>\n",
+              "      <td>mCi/mL</td>\n",
+              "      <td>Radioactive Diagnostic Agent [EPC],Positron Em...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20191231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>5</th>\n",
+              "      <td>0002-1436_ad6f74e8-b0ef-4a96-9249-c1225c5cd6a7</td>\n",
+              "      <td>0002-1436</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>galcanezumab</td>\n",
+              "      <td>INJECTION, SOLUTION</td>\n",
+              "      <td>SUBCUTANEOUS</td>\n",
+              "      <td>20180927</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>BLA</td>\n",
+              "      <td>BLA761063</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>GALCANEZUMAB</td>\n",
+              "      <td>120</td>\n",
+              "      <td>mg/mL</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>10</th>\n",
+              "      <td>0002-3228_f1ee27ad-c38e-430a-b027-0b7ebad7403e</td>\n",
+              "      <td>0002-3228</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Atomoxetine hydrochloride</td>\n",
+              "      <td>CAPSULE</td>\n",
+              "      <td>ORAL</td>\n",
+              "      <td>20021126</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA021411</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>ATOMOXETINE HYDROCHLORIDE</td>\n",
+              "      <td>25</td>\n",
+              "      <td>mg/1</td>\n",
+              "      <td>Norepinephrine Reuptake Inhibitor [EPC],Norepi...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>11</th>\n",
+              "      <td>0002-3229_f1ee27ad-c38e-430a-b027-0b7ebad7403e</td>\n",
+              "      <td>0002-3229</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Atomoxetine hydrochloride</td>\n",
+              "      <td>CAPSULE</td>\n",
+              "      <td>ORAL</td>\n",
+              "      <td>20021126</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA021411</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>ATOMOXETINE HYDROCHLORIDE</td>\n",
+              "      <td>40</td>\n",
+              "      <td>mg/1</td>\n",
+              "      <td>Norepinephrine Reuptake Inhibitor [EPC],Norepi...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>13</th>\n",
+              "      <td>0002-3231_89af030d-8f23-4e54-92f0-724df4d81712</td>\n",
+              "      <td>0002-3231</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Olanzapine and Fluoxetine hydrochloride</td>\n",
+              "      <td>CAPSULE</td>\n",
+              "      <td>ORAL</td>\n",
+              "      <td>20031224</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA021520</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>OLANZAPINE; FLUOXETINE HYDROCHLORIDE</td>\n",
+              "      <td>6; 25</td>\n",
+              "      <td>mg/1; mg/1</td>\n",
+              "      <td>Atypical Antipsychotic [EPC],Serotonin Reuptak...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20201231.0</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>14</th>\n",
+              "      <td>0002-3232_89af030d-8f23-4e54-92f0-724df4d81712</td>\n",
+              "      <td>0002-3232</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>Olanzapine and Fluoxetine hydrochloride</td>\n",
+              "      <td>CAPSULE</td>\n",
+              "      <td>ORAL</td>\n",
+              "      <td>20031224</td>\n",
+              "      <td>20190731.0</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA021520</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>OLANZAPINE; FLUOXETINE HYDROCHLORIDE</td>\n",
+              "      <td>12; 25</td>\n",
+              "      <td>mg/1; mg/1</td>\n",
+              "      <td>Atypical Antipsychotic [EPC],Serotonin Reuptak...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>NaN</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>28</th>\n",
+              "      <td>0002-4182_1606b529-d77d-41d8-9379-094caf0241c2</td>\n",
+              "      <td>0002-4182</td>\n",
+              "      <td>HUMAN PRESCRIPTION DRUG</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>baricitinib</td>\n",
+              "      <td>TABLET, FILM COATED</td>\n",
+              "      <td>ORAL</td>\n",
+              "      <td>20180531</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>NDA</td>\n",
+              "      <td>NDA207924</td>\n",
+              "      <td>Eli Lilly and Company</td>\n",
+              "      <td>BARICITINIB</td>\n",
+              "      <td>2</td>\n",
+              "      <td>mg/1</td>\n",
+              "      <td>Janus Kinase Inhibitor [EPC],Janus Kinase Inhi...</td>\n",
+              "      <td>NaN</td>\n",
+              "      <td>N</td>\n",
+              "      <td>20191231.0</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>"
+            ],
+            "text/plain": [
+              "                                         PRODUCTID PRODUCTNDC  \\\n",
+              "1   0002-1200_957ee1b5-dfa7-4e3f-96e1-6bed1ffc0abe  0002-1200   \n",
+              "5   0002-1436_ad6f74e8-b0ef-4a96-9249-c1225c5cd6a7  0002-1436   \n",
+              "10  0002-3228_f1ee27ad-c38e-430a-b027-0b7ebad7403e  0002-3228   \n",
+              "11  0002-3229_f1ee27ad-c38e-430a-b027-0b7ebad7403e  0002-3229   \n",
+              "13  0002-3231_89af030d-8f23-4e54-92f0-724df4d81712  0002-3231   \n",
+              "14  0002-3232_89af030d-8f23-4e54-92f0-724df4d81712  0002-3232   \n",
+              "28  0002-4182_1606b529-d77d-41d8-9379-094caf0241c2  0002-4182   \n",
+              "\n",
+              "            PRODUCTTYPENAME PROPRIETARYNAME PROPRIETARYNAMESUFFIX  \\\n",
+              "1   HUMAN PRESCRIPTION DRUG             NaN                   NaN   \n",
+              "5   HUMAN PRESCRIPTION DRUG             NaN                   NaN   \n",
+              "10  HUMAN PRESCRIPTION DRUG             NaN                   NaN   \n",
+              "11  HUMAN PRESCRIPTION DRUG             NaN                   NaN   \n",
+              "13  HUMAN PRESCRIPTION DRUG             NaN                   NaN   \n",
+              "14  HUMAN PRESCRIPTION DRUG             NaN                   NaN   \n",
+              "28  HUMAN PRESCRIPTION DRUG             NaN                   NaN   \n",
+              "\n",
+              "                         NONPROPRIETARYNAME       DOSAGEFORMNAME  \\\n",
+              "1                          Florbetapir F 18  INJECTION, SOLUTION   \n",
+              "5                              galcanezumab  INJECTION, SOLUTION   \n",
+              "10                Atomoxetine hydrochloride              CAPSULE   \n",
+              "11                Atomoxetine hydrochloride              CAPSULE   \n",
+              "13  Olanzapine and Fluoxetine hydrochloride              CAPSULE   \n",
+              "14  Olanzapine and Fluoxetine hydrochloride              CAPSULE   \n",
+              "28                              baricitinib  TABLET, FILM COATED   \n",
+              "\n",
+              "       ROUTENAME  STARTMARKETINGDATE  ENDMARKETINGDATE MARKETINGCATEGORYNAME  \\\n",
+              "1    INTRAVENOUS            20120601               NaN                   NDA   \n",
+              "5   SUBCUTANEOUS            20180927               NaN                   BLA   \n",
+              "10          ORAL            20021126               NaN                   NDA   \n",
+              "11          ORAL            20021126               NaN                   NDA   \n",
+              "13          ORAL            20031224               NaN                   NDA   \n",
+              "14          ORAL            20031224        20190731.0                   NDA   \n",
+              "28          ORAL            20180531               NaN                   NDA   \n",
+              "\n",
+              "   APPLICATIONNUMBER            LABELERNAME  \\\n",
+              "1          NDA202008  Eli Lilly and Company   \n",
+              "5          BLA761063  Eli Lilly and Company   \n",
+              "10         NDA021411  Eli Lilly and Company   \n",
+              "11         NDA021411  Eli Lilly and Company   \n",
+              "13         NDA021520  Eli Lilly and Company   \n",
+              "14         NDA021520  Eli Lilly and Company   \n",
+              "28         NDA207924  Eli Lilly and Company   \n",
+              "\n",
+              "                           SUBSTANCENAME ACTIVE_NUMERATOR_STRENGTH  \\\n",
+              "1                       FLORBETAPIR F-18                        51   \n",
+              "5                           GALCANEZUMAB                       120   \n",
+              "10             ATOMOXETINE HYDROCHLORIDE                        25   \n",
+              "11             ATOMOXETINE HYDROCHLORIDE                        40   \n",
+              "13  OLANZAPINE; FLUOXETINE HYDROCHLORIDE                     6; 25   \n",
+              "14  OLANZAPINE; FLUOXETINE HYDROCHLORIDE                    12; 25   \n",
+              "28                           BARICITINIB                         2   \n",
+              "\n",
+              "   ACTIVE_INGRED_UNIT                                      PHARM_CLASSES  \\\n",
+              "1              mCi/mL  Radioactive Diagnostic Agent [EPC],Positron Em...   \n",
+              "5               mg/mL                                                NaN   \n",
+              "10               mg/1  Norepinephrine Reuptake Inhibitor [EPC],Norepi...   \n",
+              "11               mg/1  Norepinephrine Reuptake Inhibitor [EPC],Norepi...   \n",
+              "13         mg/1; mg/1  Atypical Antipsychotic [EPC],Serotonin Reuptak...   \n",
+              "14         mg/1; mg/1  Atypical Antipsychotic [EPC],Serotonin Reuptak...   \n",
+              "28               mg/1  Janus Kinase Inhibitor [EPC],Janus Kinase Inhi...   \n",
+              "\n",
+              "    DEASCHEDULE NDC_EXCLUDE_FLAG  LISTING_RECORD_CERTIFIED_THROUGH  \n",
+              "1           NaN                N                        20191231.0  \n",
+              "5           NaN                N                        20201231.0  \n",
+              "10          NaN                N                        20201231.0  \n",
+              "11          NaN                N                        20201231.0  \n",
+              "13          NaN                N                        20201231.0  \n",
+              "14          NaN                N                               NaN  \n",
+              "28          NaN                N                        20191231.0  "
+            ]
+          },
+          "execution_count": 41,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "blanks"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "26dyDL5CaG-l"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "oZJGFs0iaG-l"
+      },
+      "outputs": [],
+      "source": [
+        "#So here we are taking the proprietary name nad filling all the NA values with the non proprietary name.\n",
+        "\n",
+        "ndc['PROPRIETARYNAME'].fillna(ndc['NONPROPRIETARYNAME'], inplace=True)"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "BIaFXzLyaG-m",
+        "outputId": "b6076afc-a23b-46d8-9e97-f2f5121bfd2c"
+      },
+      "outputs": [
+        {
+          "data": {
+            "text/plain": [
+              "(0, 20)"
+            ]
+          },
+          "execution_count": 43,
+          "metadata": {},
+          "output_type": "execute_result"
+        }
+      ],
+      "source": [
+        "#Now when we create a data set using the same filter we see that there are no rows with a null value in the proprietary name column.\n",
+        "blanks = ndc[ndc['PROPRIETARYNAME'].isnull()]\n",
+        "blanks.shape"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 12,
+      "metadata": {
+        "id": "pcImtheNaG-m",
+        "outputId": "5c24afa5-8a88-40a3-9fd7-b1160694bc98",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 198
+        }
+      },
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "NameError",
+          "evalue": "ignored",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-12-13b9560204c0>\u001b[0m in \u001b[0;36m<cell line: 2>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0;31m#\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mndc\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mndc\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'PROPRIETARYNAME'\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m==\u001b[0m \u001b[0;34m'Florbetapir F 18'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m: name 'ndc' is not defined"
+          ]
+        }
+      ],
+      "source": [
+        "#Here we are looking for the values in the data frame where the proprietary name is 'Florbetapir F 18'. It actually returned a single row but I accidentally ran it without the csv being imported to my google colab.\n",
+        "ndc[ndc['PROPRIETARYNAME'] == 'Florbetapir F 18']"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "lVpKw0HiaG-u"
+      },
+      "outputs": [],
+      "source": [
+        "blanks"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "_7lwmOgfaG-u"
+      },
+      "outputs": [],
+      "source": [
+        "# STEP 2: Check the formats - how many are all caps, how many are all lowercase\n",
+        "\n",
+        "#We are looking for all the values that are all caps.\n",
+        "\n",
+        "all_caps = ndc[ndc['PROPRIETARYNAME'].str.contains('^[A-Z0-9 \\-]+$')]\n",
+        "all_caps.shape"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "wwUKAumiaG-u"
+      },
+      "outputs": [],
+      "source": [
+        "#looking for all of them that are lower case.\n",
+        "all_lc = ndc[ndc['PROPRIETARYNAME'].str.contains('^[a-z0-9 \\-]+$')]\n",
+        "all_lc.shape"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "amQsyUQRaG-v"
+      },
+      "outputs": [],
+      "source": [
+        "#we create a new data frame that is the same only now all the proprietary name values are lower case.\n",
+        "is_lower = ndc['PROPRIETARYNAME'] == ndc['PROPRIETARYNAME'].str.lower()\n",
+        "ndc[is_lower].shape"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "wU1lGSgpaG-v"
+      },
+      "outputs": [],
+      "source": [
+        "# Let's just make them all lower case\n",
+        "\n",
+        "ndc['PROPRIETARYNAME'] = ndc['PROPRIETARYNAME'].str.lower()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Z9iJjP4VaG-v"
+      },
+      "outputs": [],
+      "source": [
+        "all_lc = ndc[ndc['PROPRIETARYNAME'] == ndc['PROPRIETARYNAME'].str.lower() ]\n",
+        "all_lc.shape"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "KojPCRwiaG-v"
+      },
+      "outputs": [],
+      "source": [
+        "ndc.shape"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "FjnMcfooaG-w"
+      },
+      "outputs": [],
+      "source": [
+        "# STEP 3: Look for any that might have strange characters or number\n",
+        "\n",
+        "#We are looking for any values in the column with a strange character. The characters are in the ().\n",
+        "weird = ndc[ndc['PROPRIETARYNAME'].str.contains('[0-9\\-\\\\\\/]')]\n",
+        "weird.shape"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "6CJ2YtIvaG-w"
+      },
+      "outputs": [],
+      "source": [
+        "weird"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "kCOpSwb-aG-w"
+      },
+      "outputs": [],
+      "source": [
+        "# Let's assume kenalog-40 and kenalog-10 should be grouped together"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "C1Nt6p-ZaG-w"
+      },
+      "outputs": [],
+      "source": [
+        "#We were able to remove all of the numbers are weird characters from the proprietary name which left us with just the word kenalog anytime it appears.\n",
+        "ndc['PROPRIETARYNAME'] = ndc['PROPRIETARYNAME'].str.replace('\\-[0-9]+','')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "dfBSQyrTaG-x"
+      },
+      "outputs": [],
+      "source": [
+        "ndc[ndc['PROPRIETARYNAME'].str.contains('kenalog')]"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "d1CVoS0vaG-x"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "Zwa4VYTFaG-x"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "8QtQo6iTaG-x"
+      },
+      "outputs": [],
+      "source": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.6.7"
+    },
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
